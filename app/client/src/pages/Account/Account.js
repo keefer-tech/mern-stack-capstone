@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
   List,
@@ -8,9 +7,9 @@ import {
   makeStyles,
   useTheme,
 } from "@material-ui/core";
-import ButtonMain from "../../components/ButtonMain/ButtonMain";
-import ShippingDetails from "../Cart/ShippingDetails";
 import AccountDetails from "./AccountDetails";
+import ShippingForm from "../Cart/ShippingForm";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => {
   const {
@@ -22,6 +21,13 @@ const useStyles = makeStyles((theme) => {
       height: "100%",
       backgroundColor: primary.main,
       display: "flex",
+      flexDirection: "column",
+    },
+    navSidebar: {
+      width: "20%",
+    },
+    contentContainer: {
+      display: "flex",
     },
   };
 });
@@ -30,35 +36,47 @@ export default function Account() {
   const auth = useAuth();
   const classes = useStyles();
   const theme = useTheme();
-  const [accountComponent, setAccountComponent] = useState("");
+  const [accountComponent, setAccountComponent] = useState("accountDetails");
 
   const {
     palette: { red },
   } = theme;
 
-  const handleLogout = () => {
-    auth.logUserOut();
-  };
-
   return (
     <div className={classes.accountsContainer}>
-      <h1 style={{ padding: "1rem" }}>your account</h1>
-      <List style={{ margin: "1rem", borderRight: "2px solid black" }}>
-        <ListItem button onClick={() => setAccountComponent("accountDetails")}>
-          <ListItemText primary="account details" />
-        </ListItem>
-        <ListItem button onClick={() => setAccountComponent("newBlog")}>
-          <ListItemText primary="shipping details" />
-        </ListItem>
-      </List>
-      <div>
-        {accountComponent === "accountDetails" && <AccountDetails />}
-        {accountComponent === "shippingDetails" && <ShippingDetails />}
+      <h1 style={{ padding: "1rem", width: "100%" }}>your account</h1>
+      <div className={classes.contentContainer}>
+        <List
+          className={classes.navSidebar}
+          style={{ margin: "1rem", borderRight: "2px solid black" }}
+        >
+          <ListItem
+            button
+            onClick={() => setAccountComponent("accountDetails")}
+          >
+            <ListItemText primary="account details" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={() => setAccountComponent("shippingDetails")}
+          >
+            <ListItemText primary="shipping details" />
+          </ListItem>
+        </List>
+        <div style={{ width: "80%", height: "100%" }}>
+          {accountComponent === "accountDetails" && <AccountDetails />}
+          {accountComponent === "shippingDetails" && (
+            <ShippingForm
+              showShippingForm={true}
+              setShowShippingForm={(bool) => {
+                return bool;
+              }}
+            />
+          )}
+        </div>
+
+        {!auth.isAuthenticated() && <Redirect to="/" />}
       </div>
-      <ButtonMain color={red.main} handleClick={handleLogout}>
-        logout
-      </ButtonMain>
-      {!auth.isAuthenticated() && <Redirect to="/" />}
     </div>
   );
 }

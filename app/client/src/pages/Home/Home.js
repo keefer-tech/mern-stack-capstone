@@ -15,9 +15,9 @@ export default function Home(props) {
     async () => {
       const { data } = await API.post("/records/query", {
         category: "year",
-        title: "2020",
+        title: "2021",
       });
-      return data;
+      return data; 
     }
   );
 
@@ -59,10 +59,7 @@ export default function Home(props) {
       <HeroImage>
         <div className={classes.heroContainer}>
           <Typography className={classes.heroText}>
-            HELLO AND WELCOME
-          </Typography>
-          <Typography className={classes.heroText}>
-            to the <span>catalog music</span> webstore
+            <span>catalog music</span>
           </Typography>
           <Divider />
         </div>

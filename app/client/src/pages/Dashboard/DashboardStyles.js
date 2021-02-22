@@ -58,11 +58,26 @@ const useStyles = makeStyles((theme) => {
     deleteButton: {
       backgroundColor: red.main,
       borderRadius: 0,
-      color: primary.main,
     },
     cardActionContainer: {
       display: "flex",
       justifyContent: "center",
+    },
+    addRecordModal: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    addRecordCard: {
+      display: "flex",
+      flexDirection: "column",
+      position: "relative",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "1rem 2rem",
+      border: `4px double ${secondary.main}`,
+      borderRadius: 0,
+      backgroundColor: primary.main,
     },
   };
 });

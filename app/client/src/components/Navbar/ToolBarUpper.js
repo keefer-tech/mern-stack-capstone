@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Link as MuiLink } from "@material-ui/core/";
 import { useTheme } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => {
   } = theme;
 
   return {
-    root: {},
     toolBarUpper: {
+      position: "relative",
       maxHeight: "5vh",
       justifyContent: "space-between",
       alignItems: "center",
@@ -41,9 +41,11 @@ const useStyles = makeStyles((theme) => {
       textDecoration: "none",
       display: "flex",
       alignItems: "center",
+      margin: 0,
+      padding: 0,
     },
     navLinks: {
-      color: "#333",
+      color: secondary.main,
       display: "inline-block",
       cursor: "pointer",
     },
@@ -60,6 +62,16 @@ const useStyles = makeStyles((theme) => {
         color: "white",
         margin: "auto",
       },
+    },
+    headingContainer: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
   };
 });
@@ -80,12 +92,21 @@ export default function ToolBarUpper() {
 
   return (
     <Toolbar className={classes.toolBarUpper}>
+      <div
+        className={
+          matchDesktopUp
+            ? classes.desktopHeadingContainer
+            : classes.headingContainer
+        }
+      >
+        <NavLink to="/" style={{ textDecoration: "none", padding: 0 }}>
+          <h1 className={classes.catalogHeading}>
+            {matchDesktopUp ? "catalogmusic" : "catalog"}
+          </h1>
+        </NavLink>
+      </div>
       {matchTabletDown && <MenuDrawer />}
-      <Link to="/" style={{ textDecoration: "none" }}>
-        <h1 className={classes.catalogHeading}>
-          {matchDesktopUp ? "catalogmusic" : "catalog"}
-        </h1>
-      </Link>
+
       <div>
         <React.Fragment>
           {(auth.isSuper() || auth.isAdmin()) && (

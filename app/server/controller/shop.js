@@ -124,6 +124,25 @@ const addItems = async (req, res) => {
   }
 };
 
+const editItem = async (req, res, next) => {
+  const { _id, description, review, discogs_id } = req.body;
+  const blogObj = { title, byline, body };
+
+  try {
+    if (imageStr) {
+      const imgResp = await cloudinary.uploader.upload(imageStr, {
+        upload_preset: "dogolat",
+      });
+      blogObj.image_url = imgResp.secure_url;
+    }
+
+    const updatedBlog = await Blog.findOneAndUpdate({ _id }, { $set: blogObj });
+    res.status(200).json(updatedBlog);
+  } catch (e) {
+    res.status(400).json(e.message);
+  }
+};
+
 const getMongoCatalog = async (req, res) => {
   try {
     const catalogList = await Vinyl.find();
@@ -137,6 +156,15 @@ const getMongoCatalog = async (req, res) => {
     );
 
     res.status(200).json({ ids: ids, detailed: catalogList });
+  } catch (e) {
+    res.status(400).json(e.message);
+  }
+};
+
+const getSquareCatalog = async (req, res) => {
+  try {
+    const squareList = await square.getCatalog();
+    res.status(200).json(squareList);
   } catch (e) {
     res.status(400).json(e.message);
   }
@@ -171,6 +199,7 @@ const listItems = async (req, res) => {
 };
 
 const deleteItem = async (req, res) => {
+  console.log(req);
   try {
     const deleted = await square.deleteItem(req.body.item);
     const deletedVinyl = await Vinyl.findOneAndDelete({
@@ -178,6 +207,7 @@ const deleteItem = async (req, res) => {
     });
     res.status(200).json({ deleted, deletedVinyl });
   } catch (e) {
+    console.log("Something");
     res.status(400).json(e.message);
   }
 };
@@ -243,6 +273,7 @@ module.exports = {
   addItem,
   addItems,
   getMongoCatalog,
+  getSquareCatalog,
   listItem,
   listItems,
   deleteItem,
